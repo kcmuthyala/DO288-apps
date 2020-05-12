@@ -1,2 +1,16 @@
 # Use the httpd-parent image as base
 FROM quay.io/redhattraining/httpd-parent
+
+EXPOSE 8080
+
+label io.k8s.description="a BASIC aPACHE http sERVER CHILD IMAGE, USES onbuild" \ 
+	io.k8s.display-name="Apache HTTP Server" \ 
+	io.openshift.espose-services="8080:http" \ 
+	io.openshift.tage="apache, https"
+
+RUN sed -i "s/Listen 80/Listen 8080/g" /etc/httpd/conf/httpd.conf
+
+RUN chgrp -R 0 /var/log/httpd /var/run/httpds && \
+    chmod -R g=u /var/log/httpd /var/run/httpd
+
+USER 1001
